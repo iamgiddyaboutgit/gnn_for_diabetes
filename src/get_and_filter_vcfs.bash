@@ -6,21 +6,24 @@ local_path_to_sync="/home/jpatterson87/for_classes/gnn_for_diabetes/data/raw_dat
 origin="s3://1000genomes-dragen/data/dragen-3.7.6/hg38-graph-based/"
 for remote_path in $(aws s3 ls --no-sign-request "${origin}");
 do
-    # Bash-ism that removes trailing slash
-    modified_remote_path=${remote_path%/}
     # Sometimes we have text that says PRE,
     # but we don't like that.
-    if [[ "${modified_remote_path}" != "PRE" ]];
+    if [[ "${remote_path}" != "PRE" ]];
     then
-        # double_modified_remote_path will not have PRE
-        double_modified_remote_path="${modified_remote_path}"
-        
+        # modified_remote_path will not have PRE
+        modified_remote_path="${remote_path}"
+
+        aws s3 sync \
+            --no-sign-request \
+            --exclude="*" \
+            --include="*.hard-filtered.vcf.gz*" \
+            ${origin}${modified_remote_path} "${local_path_to_sync}"
+    fi
+
+    
 done
-aws s3 sync \
-    --no-sign-request \
-    --exclude="*" \
-    --include="*.hard-filtered.vcf.gz*" \
-    ${origin}${double_modified_remote_path} "${local_path_to_sync}"
+
+
 
 # vcf="/home/jpatterson87/for_classes/gnn_for_diabetes/data/raw_data/data/dragen-3.7.6/hg38-graph-based/HG00096/HG00096.hard-filtered.vcf.gz"
 # regions="/home/jpatterson87/for_classes/gnn_for_diabetes/data/raw_data/pathway_data/custom_genes.bed"
