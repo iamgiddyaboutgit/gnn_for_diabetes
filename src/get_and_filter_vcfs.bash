@@ -8,18 +8,17 @@ local_path_for_transformed="/home/jpatterson87/for_classes/gnn_for_diabetes/data
 origin="s3://1000genomes-dragen/data/dragen-3.7.6/hg38-graph-based/"
 for remote_end_of_path in $(aws s3 ls --no-sign-request "${origin}");
 do
-    # Sometimes we have text that says PRE,
-    # but we don't like that.
-    if [[ "${remote_end_of_path}" != "PRE" ]];
+
+    first_two_chars_of_remote_end_of_path=$(cut -c 1-2 "${remote_end_of_path}")
+    if [[ "${first_two_chars_of_remote_end_of_path}" == "HG" ]] || [[ "${first_two_chars_of_remote_end_of_path}" == "NA" ]];
     then
         local_path_to_sync="${start_of_local_path_to_sync}${remote_end_of_path}"
 
         # A Bash-ism is used here to remove a trailing /
-        vcf="${remote_end_of_path%/}.hard-filtered.vcf.gz"
         vcf_basename="${remote_end_of_path%/}.hard-filtered"
+        transformed_vcf="${local_path_for_transformed}${vcf_basename}.sliced.vcf"
         # Ok, but have we already downloaded the files?
-
-        if [[ ! -f "${local_path_for_transformed}${vcf_basename}.sliced.vcf" ]];
+        if [[ ! -f "${transformed_vcf}" ]];
         then
             # We have not already downloaded the files.
             mkdir -p "${local_path_to_sync}"
@@ -40,7 +39,8 @@ do
             # md5sum -c "${local_path_to_sync}*.md5sum"
             
             # Note that tabix produces something that is no longer compressed.
-            echo "running tabix"
+            vcf=${local_path_to_sync}${vcf_basename}.vcf.gz
+            echo "running tabix on ${vcf}"
             tabix ${vcf} --regions ${regions} --print-header > "${local_path_for_transformed}${vcf_basename}.sliced.vcf"
             # Clean-up
             # gzip "${local_path_for_transformed}vcf_basename.sliced.vcf"
