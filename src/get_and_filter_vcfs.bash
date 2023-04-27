@@ -9,7 +9,7 @@ origin="s3://1000genomes-dragen/data/dragen-3.7.6/hg38-graph-based/"
 for remote_end_of_path in $(aws s3 ls --no-sign-request "${origin}");
 do
 
-    first_two_chars_of_remote_end_of_path=$(cut -c 1-2 "${remote_end_of_path}")
+    first_two_chars_of_remote_end_of_path=$(echo "${remote_end_of_path}" | cut -c 1-2 -)
     if [[ "${first_two_chars_of_remote_end_of_path}" == "HG" ]] || [[ "${first_two_chars_of_remote_end_of_path}" == "NA" ]];
     then
         local_path_to_sync="${start_of_local_path_to_sync}${remote_end_of_path}"
