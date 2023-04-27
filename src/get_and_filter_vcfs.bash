@@ -13,14 +13,12 @@ do
     if [[ "${remote_end_of_path}" != "PRE" ]];
     then
         local_path_to_sync="${start_of_local_path_to_sync}${remote_end_of_path}"
-        echo "local_path_to_sync: ${local_path_to_sync}"
+
         # A Bash-ism is used here to remove a trailing /
         vcf="${remote_end_of_path%/}.hard-filtered.vcf.gz"
         vcf_basename="${remote_end_of_path%/}.hard-filtered"
         # Ok, but have we already downloaded the files?
-        echo "vcf_basename: ${vcf_basename}"
-        echo "if part: ${local_path_for_transformed}${vcf_basename}.sliced.vcf"
-        sleep 3s
+
         if [[ ! -f "${local_path_for_transformed}${vcf_basename}.sliced.vcf" ]];
         then
             # We have not already downloaded the files.
@@ -29,12 +27,12 @@ do
             # Notice here that unlike the main loop,
             # the directory here of ${origin}${remote_end_of_path}
             # is more specific.
-            sleep 3s
-            # aws s3 sync \
-            #     --no-sign-request \
-            #     --exclude="*" \
-            #     --include="*.hard-filtered.vcf.gz*" \
-            #     ${origin}${remote_end_of_path} "${local_path_to_sync}" 
+
+            aws s3 sync \
+                --no-sign-request \
+                --exclude="*" \
+                --include="*.hard-filtered.vcf.gz*" \
+                ${origin}${remote_end_of_path} "${local_path_to_sync}" 
             
             # Check download.
             # Currently, this isn't working because the files *.md5sum
@@ -43,7 +41,7 @@ do
             
             # Note that tabix produces something that is no longer compressed.
             echo "running tabix"
-            # tabix ${vcf} --regions ${regions} --print-header > "${local_path_for_transformed}${vcf_basename}.sliced.vcf"
+            tabix ${vcf} --regions ${regions} --print-header > "${local_path_for_transformed}${vcf_basename}.sliced.vcf"
             # Clean-up
             # gzip "${local_path_for_transformed}vcf_basename.sliced.vcf"
             echo "cleaning up for the next iteration"
