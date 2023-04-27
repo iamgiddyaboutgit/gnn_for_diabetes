@@ -82,7 +82,7 @@ def add_nodes_to_tsv(loci_to_node, tsv, out):
                 # Get the first two fields
                 locus = "\t".join(tsv_line.split(sep="\t", maxsplit=2)[0:2])
 
-                node_id = loci_to_node[locus] 
+                node_id = str(loci_to_node[locus]) 
                 # Prepend node_id to the line.
                 # Write the line to the output file.
                 out.writelines([node_id, "\t", tsv_line])
