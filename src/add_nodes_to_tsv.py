@@ -9,52 +9,16 @@ the graph. If we didn't do this, we wouldn't know which rows in the .tsv
 correspond to which nodes in the graph.
 """
 
-import re
 import argparse
 
 def main():
     user_args = get_user_args()
-    # Find the first occurrence of a line in the .vcf
-    # that starts with a # and doesn't contain any tabs.
-    # loci_to_node holds the correspondences between
-    # loci and nodes.
-    loci_to_node = dict()
-    node_id = -1
-
-    with open(file=user_args.vcf, mode="r") as vcf:
-        for line in vcf:
-            # If the line starts with a # and does not
-            # have any tabs, then we need to increase
-            # the node id because whatever we find next
-            # is another section that we need.
-            if line.startswith("#") and ("\t" not in line):
-                node_id += 1
-                # This is the section for genomic loci 
-                # corresponding to the first region.
-                # Skip the header part.
- 
-            # Check that the section is not empty.
-            elif not line.startswith("#") and ("\t" in line):
-                # line now has the info. we need in it.
-                # Get the first two fields
-                loci = "\t".join(line.split(sep="\t", maxsplit=2)[0:2])
-                loci_to_node[loci] = node_id
-
-    # Now, loop through the .tsv.
-    with open(file=user_args.tsv) as tsv:
-        pass
-
-
-
-
-
+    loci_to_node = get_loci_to_node_dict(vcf=user_args.vcf)
     
-    # Append "\tnode_id" to the first line.
-    # Write the line to the output file.
-    # Go to the next line. Use the first 2 fields in the .tsv
-    # to look up the value in the dict that should
-    # be added as a new column.  Append the value to the line.
-    # Write the line to the output file.
+    add_nodes_to_tsv(loci_to_node=loci_to_node,
+                     tsv=user_args.tsv,
+                     out=user_args.o)
+    return None
 
 def get_user_args() -> argparse.Namespace:
     """Get arguments from the command line and validate them."""
@@ -72,6 +36,58 @@ def get_user_args() -> argparse.Namespace:
     return args
 
 
+def get_loci_to_node_dict(vcf):
+    """Get a dictionary whose keys are loci
+
+    and whose values are node_ids.
+    """
+    loci_to_node = dict()
+    node_id = -1
+
+    with open(file=vcf, mode="r") as vcf:
+        for line in vcf:
+            # If a line is a formatted a certain way,
+            # then we can recognize it as a tabix region header.
+            # We need to increase
+            # the node_id because whatever we find next
+            # is another region that we need.
+            if line[0] == "#" and line[1] != "#" and ("\t" not in line):
+                node_id += 1
+                # This is the section for genomic loci 
+                # corresponding to the first region.
+                # Skip the header part.
+ 
+            # Check that the section is not empty.
+            elif not line.startswith("#") and ("\t" in line):
+                # line now has the info. we need in it.
+                # Get the first two fields
+                loci = "\t".join(line.split(sep="\t", maxsplit=2)[0:2])
+                loci_to_node[loci] = node_id
+    
+    return loci_to_node
+
+
+def add_nodes_to_tsv(loci_to_node, tsv, out):  
+    # Loop through the .tsv, figure out what's in there,
+    # and then write to out accordingly.
+    with open(file=tsv, mode="r") as tsv:
+        with open(file=out, mode="w") as out:
+            tsv_first_line = tsv.readline()
+            # Prepend "node_id\t" to the first line.
+            new_tsv_first_line = "\t".join(["node_id", tsv_first_line])
+            # Write the line to the output file.
+            out.write(new_tsv_first_line)
+            # Iterate through lines, using loci_to_node for lookups.
+            for tsv_line in tsv:
+                # Get the first two fields
+                locus = "\t".join(tsv_line.split(sep="\t", maxsplit=2)[0:2])
+
+                node_id = loci_to_node[locus] 
+                # Prepend node_id to the line.
+                # Write the line to the output file.
+                out.writelines([node_id, "\t", tsv_line])
+                  
+    return None
 
 
 ###############################################################################
