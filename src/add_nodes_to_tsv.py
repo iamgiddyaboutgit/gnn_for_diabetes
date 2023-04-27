@@ -40,28 +40,15 @@ def main():
                 loci = "\t".join(line.split(sep="\t", maxsplit=2)[0:2])
                 loci_to_node[loci] = node_id
 
-        
-
-
-
-
-
-
-
-    # Get the first two fields in following lines until
-    # we reach another line that starts with # or the
-    # end of the file.  These two fields should be 
-    # placed as new keys in a dict.  The corresponding
-    # values in the dict should be 0.
-
-    # If we reach another line that starts with a #,
-    # skip it.  On the other hand, if we reach the 
-    # end of the file, end.
-
-    # Repeat earlier stuff, storing successively higher
-    # values in the dict for each iteration.
-
     # Now, loop through the .tsv.
+    with open(file=user_args.tsv) as tsv:
+        pass
+
+
+
+
+
+    
     # Append "\tnode_id" to the first line.
     # Write the line to the output file.
     # Go to the next line. Use the first 2 fields in the .tsv
