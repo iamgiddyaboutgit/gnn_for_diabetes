@@ -43,6 +43,7 @@ do
             # Note that tabix produces something that is no longer compressed.
             gvcf=${local_path_to_sync}${gvcf_basename}.gvcf.gz
             echo "running tabix on ${gvcf}"
+            # --separate-regions  is another option that can be used for tabix
             tabix ${gvcf} --regions ${regions} --print-header > "${local_path_for_transformed}${gvcf_basename}.sliced.gvcf"
             
             # Clean-up
