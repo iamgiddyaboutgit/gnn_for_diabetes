@@ -1,4 +1,4 @@
-Gene stable ID	Gene name	Chromosome/scaffold name	Gene start (bp)	Gene end (bp)
+gene_stable_id	gene_name	chromosome_or_scaffold_name	gene_start	gene_end
 ENSG00000210049	MT-TF	MT	577	647
 ENSG00000211459	MT-RNR1	MT	648	1601
 ENSG00000210077	MT-TV	MT	1602	1670
