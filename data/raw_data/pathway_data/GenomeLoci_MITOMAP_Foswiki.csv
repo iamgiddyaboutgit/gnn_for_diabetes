@@ -1,4 +1,4 @@
-Map Locus,Starting,Ending,Shorthand,Description,Reference
+map_locus,starting,ending,shorthand,description,reference
 MT-3H,384,391,CR:mt3H,mt3 H-strand control element,1
 MT-3L,16499,16506,CR:mt3L,L-strand control element,1
 MT-4H,371,379,CR:mt4H,mt4 H-strand control element,1
