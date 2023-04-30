@@ -1,6 +1,8 @@
-The file Human.MitoCarta3.0.xls was downloaded from the [Broad Institute](https://www.broadinstitute.org/mitocarta/mitocarta30-inventory-mammalian-mitochondrial-proteins-and-pathways) on 2023-04-28. From Sheet C MitoPathways, all of the genes were uploaded to the [IntAct webserver](https://www.ebi.ac.uk/intact/home) on 2023-04-28.
+The file ```Human.MitoCarta3.0.xls``` was downloaded from the [Broad Institute](https://www.broadinstitute.org/mitocarta/mitocarta30-inventory-mammalian-mitochondrial-proteins-and-pathways) on 2023-04-28. From Sheet A Human MitoCarta3.0, all of the listed genes were selected for further analysis.
 
-GenomeLoci_MITOMAP_Foswiki.csv was downloaded from [MitoMap](https://www.mitomap.org/foswiki/bin/view/MITOMAP/GenomeLoci) on 2023-04-28.  It contains all of the Mitochondrial DNA Function Locations recorded in MitoMap. These genes were also added to the same Intact search above.
+```GenomeLoci_MITOMAP_Foswiki.csv``` was downloaded from [MitoMap](https://www.mitomap.org/foswiki/bin/view/MITOMAP/GenomeLoci) on 2023-04-28.  It contains all of the Mitochondrial DNA Function Locations recorded in MitoMap. These genetic loci were added to the list to analyze.
+
+The file ```genomic_loci_list_before_interactions.csv``` contains all of the above loci that were selected.
 
 The results of the Intact search are contained in the file 2023-04-29-01-16_intact.txt.
 
