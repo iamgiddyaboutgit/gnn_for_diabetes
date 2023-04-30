@@ -1,4 +1,4 @@
-Gene stable ID	Gene name	Chromosome/scaffold name	Gene start (bp)	Gene end (bp)
+gene_stable_id	gene_name	chromosome_or_scaffold_name	gene_start	gene_end
 ENSG00000279170	TSTD3	6	99520976	99589899
 ENSG00000215845	TSTD1	1	161037631	161038977
 ENSG00000229833	PET100	19	7629788	7631956
