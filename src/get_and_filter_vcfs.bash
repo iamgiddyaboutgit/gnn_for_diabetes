@@ -17,10 +17,10 @@ do
         local_path_to_sync="${start_of_local_path_to_sync}${remote_end_of_path}"
 
         # A Bash-ism is used here to remove a trailing /
-        gvcf_basename="${remote_end_of_path%/}.hard-filtered"
-        transformed_gvcf="${local_path_for_transformed}${gvcf_basename}.sliced.gvcf"
+        vcf_basename="${remote_end_of_path%/}.hard-filtered"
+        transformed_vcf="${local_path_for_transformed}${vcf_basename}.sliced.vcf"
         # Ok, but have we already downloaded the files?
-        if [[ ! -f "${transformed_gvcf}" ]];
+        if [[ ! -f "${transformed_vcf}" ]];
         then
             # We have not already downloaded the files.
             mkdir -p "${local_path_to_sync}"
@@ -32,7 +32,7 @@ do
             aws s3 sync \
                 --no-sign-request \
                 --exclude="*" \
-                --include="*.hard-filtered.gvcf.gz*" \
+                --include="*.hard-filtered.vcf.gz*" \
                 ${origin}${remote_end_of_path} "${local_path_to_sync}" 
             
             # Check download.
@@ -41,13 +41,13 @@ do
             # md5sum -c "${local_path_to_sync}*.md5sum"
             
             # Note that tabix produces something that is no longer compressed.
-            gvcf=${local_path_to_sync}${gvcf_basename}.gvcf.gz
-            echo "running tabix on ${gvcf}"
+            vcf=${local_path_to_sync}${vcf_basename}.vcf.gz
+            echo "running tabix on ${vcf}"
             # --separate-regions  is another option that can be used for tabix
-            tabix ${gvcf} --regions ${regions} --print-header > "${local_path_for_transformed}${gvcf_basename}.sliced.gvcf"
+            tabix ${vcf} --regions ${regions} --print-header > "${local_path_for_transformed}${vcf_basename}.sliced.vcf"
             
             # Clean-up
-            # gzip "${local_path_for_transformed}gvcf_basename.sliced.gvcf"
+            # gzip "${local_path_for_transformed}vcf_basename.sliced.vcf"
             echo "cleaning up for the next iteration"
             rm -r -f "${local_path_to_sync}" 
         fi 
