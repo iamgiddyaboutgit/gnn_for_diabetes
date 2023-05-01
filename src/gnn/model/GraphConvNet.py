@@ -13,13 +13,13 @@ class GNN(torch.nn.Module):
         self.fc1 = Linear(hidden_size_3, output_size)
         # self.fc2 = Linear(hidden_size_4, output_size)
 
-    def forward(self, x, edge_index, edge_attr, batch):
+    def forward(self, x, edge_index, batch):
         # TODO: Finish this function
-        x = F.relu(self.conv1(x, edge_index, edge_attr))
+        x = F.relu(self.conv1(x, edge_index))
         x = F.dropout(x, training=self.training)
-        x = F.relu(self.conv2(x, edge_index, edge_attr))
+        x = F.relu(self.conv2(x, edge_index))
         x = F.dropout(x, training=self.training)
-        x = F.relu(self.conv3(x, edge_index, edge_attr))
+        x = F.relu(self.conv3(x, edge_index))
         # x = F.dropout(x, training=self.training)
         x = global_mean_pool(x, batch)
         x = self.fc1(x)
