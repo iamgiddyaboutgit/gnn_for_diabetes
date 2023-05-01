@@ -44,7 +44,7 @@ do
             vcf=${local_path_to_sync}${vcf_basename}.vcf.gz
             echo "running tabix on ${vcf}"
             # --separate-regions  is another option that can be used for tabix
-            tabix ${vcf} --regions ${regions} --print-header > "${local_path_for_transformed}${vcf_basename}.sliced.vcf"
+            tabix ${vcf} --separate-regions --regions ${regions} --print-header > "${local_path_for_transformed}${vcf_basename}.sliced.vcf"
             
             # Clean-up
             # gzip "${local_path_for_transformed}vcf_basename.sliced.vcf"
