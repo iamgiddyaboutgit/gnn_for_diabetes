@@ -82,7 +82,6 @@ def get_loci_to_node_dict(vcf):
 def add_nodes_to_tsv(loci_to_node, tsv, out):  
     # Loop through the .tsv, figure out what's in there,
     # and then write to out accordingly.
-    print(out)
     with open(file=tsv, mode="r") as tsv:
         with open(file=out, mode="w") as out:
             tsv_first_line = tsv.readline()
