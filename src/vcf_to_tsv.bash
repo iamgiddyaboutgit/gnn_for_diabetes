@@ -7,9 +7,14 @@ src_dir="/home/jpatterson87/for_classes/gnn_for_diabetes/src"
 output_dir="/home/jpatterson87/for_classes/gnn_for_diabetes/data/transformed_data_from_vms/with_nodes"
 
 find "${1}" -maxdepth 1 -mindepth 1 -type f -name "*.vcf" \
-    -exec gatk VariantsToTable --variant {} --output {}.tsv \
-    && cut -f 1,2,4,5 {}.tsv > {}.tsv.cut \
-    && "${src_dir}"/add_nodes_to_tsv.py --tsv {}.tsv.cut --vcf {} -o "${output_dir}"/{}.tsv.cut.nodes \;
+    -exec gatk VariantsToTable --variant {} --output {}.tsv \;
+    
+find "${1}" -maxdepth 1 -mindepth 1 -type f -name "*.tsv" \
+    -exec cut -f 1,2,4,5 {} > {}.tsv.cut \;
+
+# find "${1}" -maxdepth 1 -mindepth 1 -type f -name "*.cut" \
+#     -exec "${src_dir}"/add_nodes_to_tsv.py --tsv {} --vcf {} -o "${output_dir}"/{}.tsv.cut.nodes \;
+
 
 
 
